@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div>
       <p>Your favorite food, delivered while coding</p>
-      <Link to="/pizza"><button>Pizza?</button></Link>
+      <Link to="/pizza" id="order-pizza"><button>Pizza?</button></Link>
     </div>
   );
 };
