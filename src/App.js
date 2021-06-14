@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect, BrowserRouter } from "react-router-dom";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
 import { Home, Order } from "./pages";
 import { Layout } from "./components";
 
@@ -14,7 +14,7 @@ const App = () => {
           <Route path="/pizza">
             <Order />
           </Route>
-          <Redirect to="/" />
+          {/* <Redirect to="/" /> */}
         </Switch>
       </Layout>
     </BrowserRouter>

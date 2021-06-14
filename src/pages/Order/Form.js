@@ -17,13 +17,15 @@ const Form = (props) => {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(initialDisabled);
   const history = useHistory();
+  const [latestOrder, setLatestOrder] = useState(null);
 
   const postOrder = (newOrder) => {
     axios
       .post(`https://reqres.in/api/orders`, newOrder)
       .then((res) => {
-        console.log(newOrder);
+        console.log(res);
         setOrders([...orders, newOrder]);
+        setLatestOrder(res.data);
         history.push("/pizza/complete")
       })
       .catch((err) => console.log(err))
