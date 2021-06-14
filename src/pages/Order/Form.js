@@ -1,24 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 import axios from "axios";
 import schema from './schema';
 
-const initialFormValues = {
-  name: "",
-  size: "",
-  sauce: "",
-  pepperoni: false,
-  sausage: false,
-  bacon: false,
-  mushrooms: false,
-  onions: false,
-  olives: false,
-  bellpeppers: false,
-  glutenfree: false,
-  cauliflower: false,
-  special: "",
-  quantity: "",
-};
+
 
 const initialFormErrors = {
   name: "",
@@ -27,11 +13,12 @@ const initialFormErrors = {
 const initialDisabled = true;
 const initialOrders = [];
 
-const Form = () => {
+const Form = (props) => {
+  const {formValues, setFormValues} = props
   const [orders, setOrders] = useState(initialOrders);
-  const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [disabled, setDisabled] = useState(initialDisabled);
+  const history = useHistory();
 
   const postOrder = (newOrder) => {
     axios
@@ -39,11 +26,12 @@ const Form = () => {
       .then((res) => {
         console.log(newOrder);
         setOrders([...orders, newOrder]);
+        history.push("/pizza/complete")
       })
       .catch((err) => console.log(err))
-      .finally(() => {
-        setFormValues(initialFormValues);
-      });
+      // .finally(() => {
+      //   setFormValues(initialFormValues);
+      // });
   };
 
   const inputChange = (name, value) => {
@@ -83,6 +71,12 @@ const Form = () => {
     postOrder(newOrder);
   };
 
+  useEffect(() => {
+    schema.isValid(formValues).then((valid) => {
+      setDisabled(!valid);
+    });
+  }, [formValues]); 
+
   const onSubmit = (evt) => {
     evt.preventDefault();
     formSubmit();
@@ -119,19 +113,19 @@ const Form = () => {
           <label>Choice of Sauce (required): </label>
           <label>
             Marinara
-            <input type="radio" id="marinara" name="sauce" value={formValues.sauce === "marinara"} onChange={onChange}/>
+            <input type="radio" id="marinara" name="sauce" value="marinara" checked={formValues.sauce === "marinara"} onChange={onChange}/>
           </label>
           <label>
             Alfredo
-            <input type="radio" id="alfredo" name="sauce" value={formValues.sauce === "alfredo"} onChange={onChange}/>
+            <input type="radio" id="alfredo" name="sauce" value="alfredo" checked={formValues.sauce === "alfredo"} onChange={onChange}/>
           </label>
           <label>
             Pesto
-            <input type="radio" id="pesto" name="sauce" value={formValues.sauce === "pesto"} onChange={onChange}/>
+            <input type="radio" id="pesto" name="sauce" value="pesto" checked={formValues.sauce === "pesto"} onChange={onChange}/>
           </label>
           <label>
             Barbeque
-            <input type="radio" id="barbeque" name="sauce" value={formValues.sauce === "barbeque"} onChange={onChange}/>
+            <input type="radio" id="barbeque" name="sauce" value="barbeque" checked={formValues.sauce === "barbeque"} onChange={onChange}/>
           </label>
         </div>
         <div>
@@ -192,7 +186,7 @@ const Form = () => {
         <div>
           <label htmlFor="quantity">Quantity (between 1 and 5):</label>
           <input type="number" id="quantity" name="quantity" min="1" max="5" onChange={onChange} value={formValues.quantity}/>
-          <button id="order-button">Add to Order</button>
+          <button id="order-button" disabled={disabled}>Add to Order</button>
         </div>
       </form>
     </div>
