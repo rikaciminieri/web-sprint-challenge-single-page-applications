@@ -95,7 +95,7 @@ const Form = (props) => {
       <form id="pizza-form" onSubmit={onSubmit}>
         <label>
           Name
-          <input type="text" name="name" placeholder="Name is required" onChange={onChange} value={formValues.name}/>
+          <input id="name-input "type="text" name="name" placeholder="Name is required" onChange={onChange} value={formValues.name}/>
         </label>
         <p>Build your own pizza</p>
         <div>
